@@ -22,33 +22,44 @@ const getData = (dirPath, data) => {
 
   return data;
 };
-const main = (dirArr) => {
+const main = () => {
+  const t1 = performance.now();
+  const dirArr = [os.tmpdir()];
+  if (os.platform() === 'win32') {
+    dirArr.push('C:\\Windows\\Temp');
+  }
   const data = {
     files: 0,
     size: 0,
     filePathArr: [],
+    deletedFiles: 0,
   };
   dirArr.forEach((dirPath) => {
     getData(dirPath, data);
   });
-  
-  console.log(
-    `Total Files: ${data.files}\nTotal Size: ${(
-      data.size /
-      (1024 * 1024)
-    ).toFixed()} MB`
-  );
+
   console.log('Cleaning Start');
   data.filePathArr.forEach((filePath) => {
     try {
       fs.unlinkSync(filePath);
+      data.deletedFiles += 1;
     } catch (error) {
       //   console.log(`${error.code}: ${filePath}`);
     }
   });
-  console.log('Cleaning Done');
+  const t2 = performance.now();
+  const time = parseFloat(((t2 - t1) / 1000).toFixed());
 
+  console.log(
+    `
+Total Files: ${data.files}
+Total Size: ${(data.size / (1024 * 1024)).toFixed()} MB
+Total Deleted Files: ${data.deletedFiles}
+Total Time: ${time} sec
+    `
+  );
+  console.log('Cleaning Done');
   return data;
 };
 
-main([os.tmpdir()]);
+main();
