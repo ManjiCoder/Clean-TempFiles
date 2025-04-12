@@ -1,10 +1,11 @@
 {
   "name": "clean-tempfiles",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "pkg . --out-dir ./build"
   },
   "keywords": [],
   "author": "manjicoder",
@@ -14,8 +15,7 @@
   "pkg": {
     "targets": [
       "node18-win-x64"
-    ],
-    "output": "dist"
+    ]
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

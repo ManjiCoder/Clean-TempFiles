@@ -2,6 +2,7 @@ console.log('Jai Shree Ram');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const readline = require('readline');
 
 /***************************************************
  * Step 1: Get Data => totalFiles, totalSize & filePathArr
@@ -33,6 +34,25 @@ const processData = (dirPath, data) => {
 
   return data;
 };
+const processExit = () => {
+  console.log('Press Esc or Enter to exit...');
+
+  if (process.stdin.isTTY) {
+    readline.emitKeypressEvents(process.stdin);
+    process.stdin.setRawMode(true);
+    process.on('keypress', (_, key) => {
+      if (key.name === 'escape' || key.name === 'return') {
+        process.exit(1);
+      }
+    });
+  } else {
+    console.log('Not running in a TTY terminal.');
+  }
+  setTimeout(() => {
+    process.exit(1);
+  }, 10000);
+};
+
 const main = () => {
   // Timer Start
   const t1 = performance.now();
@@ -96,9 +116,8 @@ const main = () => {
 
   console.log('\nCleaning Done');
 
-  setTimeout(() => {
-    console.log('Done');
-  }, 5000);
+  processExit();
+
   return data;
 };
 
