@@ -15,8 +15,9 @@ const getData = (dirPath, data) => {
       const isEmptyDir = fs.readdirSync(pwd).length === 0;
       if (isEmptyDir) {
         fs.rmSync(pwd, { recursive: true, force: true });
+      } else {
+        getData(pwd, data);
       }
-      getData(pwd, data);
     } else {
       data.size += pwdInfo.size;
       data.files += 1;
