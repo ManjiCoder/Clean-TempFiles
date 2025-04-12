@@ -35,22 +35,23 @@ const processData = (dirPath, data) => {
   return data;
 };
 const processExit = () => {
-  console.log('Press Esc or Enter to exit...');
-
+  let timeToExit = 10_000;
   if (process.stdin.isTTY) {
+    console.log('Press Esc or Enter to exit...');
     readline.emitKeypressEvents(process.stdin);
     process.stdin.setRawMode(true);
-    process.on('keypress', (_, key) => {
+    process.stdin.on('keypress', (_, key) => {
       if (key.name === 'escape' || key.name === 'return') {
         process.exit(1);
       }
     });
   } else {
+    timeToExit = 5_000;
     console.log('Not running in a TTY terminal.');
   }
   setTimeout(() => {
-    process.exit(1);
-  }, 10000);
+    process.exit(process.stdin.isTTY);
+  }, timeToExit);
 };
 
 const main = () => {
@@ -94,7 +95,8 @@ const main = () => {
     }
   });
   const t2 = performance.now();
-  const time = parseFloat(((t2 - t1) / 1000).toFixed());
+  let time = (t2 - t1) / 1000;
+  time = parseFloat(time.toFixed(time < 1 ? 3 : 1));
 
   //   const msg = `
   // Total Files: ${data.files}
@@ -108,7 +110,7 @@ const main = () => {
   console.log('Total Files:', data.files);
   console.log(
     'Total Size:',
-    parseFloat((data.size / (1024 * 1024)).toFixed(1)),
+    parseFloat((data.size / (1024 * 1024)).toFixed(2)),
     'MB'
   );
   console.log('Total Failed To Remove Files:', data.failedToRemoveFiles);
