@@ -2,6 +2,7 @@ console.log('Jai Shree Ram');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { emitKeypressEvents } = require('readline');
 
 /***************************************************
  * Step 1: Get Data => totalFiles, totalSize & filePathArr
@@ -47,14 +48,14 @@ const main = () => {
     getData(dirPath, data);
   });
 
-  console.log('Cleaning Start');
+  console.log('Cleaning...\n');
   data.filePathArr.forEach((filePath) => {
     try {
       fs.rmSync(filePath, { recursive: true, force: true });
       data.deletedFiles += 1;
     } catch (error) {
       data.failedToRemoveFiles += 1;
-      //   console.log(`${error.code}: ${filePath}`);
+      // console.log(`${error.code}: ${filePath}`);
     }
   });
   const t2 = performance.now();
@@ -62,18 +63,27 @@ const main = () => {
 
   const msg = `
 Total Files: ${data.files}
-Total Size: ${(data.size / (1024 * 1024)).toFixed()} MB
+Total Size: ${parseFloat((data.size / (1024 * 1024)).toFixed(1))} MB
 Total Deleted Files: ${data.deletedFiles}
 Total Failed To Remove Files: ${data.failedToRemoveFiles}
 Total Time: ${time} sec
     `;
 
-  console.log(msg);
+  // console.log(msg);
+  console.log('Total Files:', data.files);
+  console.log(
+    'Total Size:',
+    parseFloat((data.size / (1024 * 1024)).toFixed(1)),
+    'MB'
+  );
+  console.log('Total Failed To Remove Files:', data.failedToRemoveFiles);
+  console.log('Total Time:', time, 'sec');
 
-  console.log('Cleaning Done');
+  console.log('\nCleaning Done');
+
   setTimeout(() => {
     console.log('Done');
-  }, 10000);
+  }, 5000);
   return data;
 };
 
