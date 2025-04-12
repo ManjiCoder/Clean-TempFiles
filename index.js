@@ -53,7 +53,7 @@ const main = () => {
       fs.rmSync(filePath, { recursive: true, force: true });
       data.deletedFiles += 1;
     } catch (error) {
-      failedToRemoveFiles += 1;
+      data.failedToRemoveFiles += 1;
       //   console.log(`${error.code}: ${filePath}`);
     }
   });
