@@ -59,6 +59,9 @@ Total Time: ${time} sec
     `
   );
   console.log('Cleaning Done');
+  setTimeout(() => {
+    console.log('Done');
+  }, 3000);
   return data;
 };
 
