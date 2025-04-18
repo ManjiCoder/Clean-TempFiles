@@ -35,23 +35,42 @@ const processData = (dirPath, data) => {
   return data;
 };
 const processExit = () => {
-  let timeToExit = 10_000;
+  let timeToExit = 10;
   if (process.stdin.isTTY) {
-    console.log('Press Esc or Enter to exit...');
     readline.emitKeypressEvents(process.stdin);
     process.stdin.setRawMode(true);
     process.stdin.on('keypress', (_, key) => {
       if (key.name === 'escape' || key.name === 'return') {
-        process.exit(1);
+        process.exit(0);
       }
     });
+    const intervalId = setInterval(() => {
+      process.stdout.write(
+        `\nPress Esc or Enter to exit. Auto Exit begin in ${timeToExit}sec`
+      );
+      timeToExit--;
+      if (timeToExit < 0) {
+        clearInterval(intervalId);
+        process.stdout.write('\n');
+        process.exit(0);
+      }
+    }, 1000);
   } else {
-    timeToExit = 5_000;
+    timeToExit = 5;
+
+    const intervalId = setInterval(() => {
+      process.stdout.write(
+        `\nPress Esc or Enter to exit. Auto Exit begin in ${timeToExit}sec`
+      );
+      timeToExit--;
+      if (timeToExit < 0) {
+        clearInterval(intervalId);
+        process.stdout.write('\n');
+        process.exit(0);
+      }
+    }, 1000);
     console.log('Not running in a TTY terminal.');
   }
-  setTimeout(() => {
-    process.exit(process.stdin.isTTY);
-  }, timeToExit);
 };
 
 const main = () => {
