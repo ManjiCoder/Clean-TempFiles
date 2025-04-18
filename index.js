@@ -4,6 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const readline = require('readline');
 
+const yellow = (text) => `\x1b[33m${text}\x1b[0m`;
 /***************************************************
  * Step 1: Get Data => totalFiles, totalSize & filePathArr
  * Step 2: Check for Empty Folder & Remove it
@@ -36,6 +37,8 @@ const processData = (dirPath, data) => {
 };
 const processExit = () => {
   let timeToExit = 10;
+  console.log(`Press Esc or Enter to exit. Auto-exit begin: ${yellow(10)}s`);
+
   if (process.stdin.isTTY) {
     readline.emitKeypressEvents(process.stdin);
     process.stdin.setRawMode(true);
@@ -45,9 +48,7 @@ const processExit = () => {
       }
     });
     const intervalId = setInterval(() => {
-      process.stdout.write(
-        `\rPress Esc or Enter to exit. Auto-exit begin in ${timeToExit}sec`
-      );
+      process.stdout.write(`\rExiting in ${yellow(timeToExit)}s...`);
       timeToExit--;
       if (timeToExit < 0) {
         clearInterval(intervalId);
@@ -59,9 +60,7 @@ const processExit = () => {
     timeToExit = 5;
 
     const intervalId = setInterval(() => {
-      process.stdout.write(
-        `\rPress Esc or Enter to exit. Auto-exit begin in ${timeToExit}sec`
-      );
+      process.stdout.write(`\rExiting in ${yellow(timeToExit)}s...`);
       timeToExit--;
       if (timeToExit < 0) {
         clearInterval(intervalId);
@@ -117,23 +116,23 @@ const main = () => {
   let time = (t2 - t1) / 1000;
   time = parseFloat(time.toFixed(time < 1 ? 3 : 1));
 
-  //   const msg = `
-  // Total Files: ${data.files}
-  // Total Size: ${parseFloat((data.size / (1024 * 1024)).toFixed(1))} MB
-  // Total Deleted Files: ${data.deletedFiles}
-  // Total Failed To Remove Files: ${data.failedToRemoveFiles}
-  // Total Time: ${time} sec
-  //     `;
+  const msg = `
+Total Files: ${yellow(data.files)}
+Total Size: ${yellow(parseFloat((data.size / (1024 * 1024)).toFixed(1)))} MB
+Total Deleted Files: ${yellow(data.deletedFiles)}
+Total Failed To Remove Files: ${yellow(data.failedToRemoveFiles)}
+Total Time: ${yellow(time)} sec
+`;
 
-  // console.log(msg);
-  console.log('Total Files:', data.files);
-  console.log(
-    'Total Size:',
-    parseFloat((data.size / (1024 * 1024)).toFixed(2)),
-    'MB'
-  );
-  console.log('Total Failed To Remove Files:', data.failedToRemoveFiles);
-  console.log('Total Time:', time, 'sec');
+  console.log(msg);
+  // console.log('Total Files:', data.files);
+  // console.log(
+  //   'Total Size:',
+  //   parseFloat((data.size / (1024 * 1024)).toFixed(2)),
+  //   'MB'
+  // );
+  // console.log('Total Failed To Remove Files:', data.failedToRemoveFiles);
+  // console.log('Total Time:', time, 'sec');
 
   console.log('\nCleaning Done\n');
 
