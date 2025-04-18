@@ -46,7 +46,7 @@ const processExit = () => {
     });
     const intervalId = setInterval(() => {
       process.stdout.write(
-        `\nPress Esc or Enter to exit. Auto Exit begin in ${timeToExit}sec`
+        `\rPress Esc or Enter to exit. Auto-exit begin in ${timeToExit}sec`
       );
       timeToExit--;
       if (timeToExit < 0) {
@@ -60,7 +60,7 @@ const processExit = () => {
 
     const intervalId = setInterval(() => {
       process.stdout.write(
-        `\nPress Esc or Enter to exit. Auto Exit begin in ${timeToExit}sec`
+        `\rPress Esc or Enter to exit. Auto-exit begin in ${timeToExit}sec`
       );
       timeToExit--;
       if (timeToExit < 0) {
@@ -135,7 +135,7 @@ const main = () => {
   console.log('Total Failed To Remove Files:', data.failedToRemoveFiles);
   console.log('Total Time:', time, 'sec');
 
-  console.log('\nCleaning Done');
+  console.log('\nCleaning Done\n');
 
   processExit();
 
